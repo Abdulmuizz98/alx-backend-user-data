@@ -2,11 +2,12 @@
 """Contains the function filtered_logger """
 
 import re
-#import typing
+# import typing
 
 
-def filter_datum(fields: list[str] , redaction: str, message: str, separator: str) -> str:
-    """Obsfucate PII in log info"""
+def filter_datum(fields: list[str], redaction: str, message: str,
+                 separator: str) -> str:
+    """Obsfucate PII in log info for privacy"""
     for field in fields:
         reg: str = '(?<={}=).*?(?={})'.format(field, separator)
         message = re.sub(reg, redaction, message)
