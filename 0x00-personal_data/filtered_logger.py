@@ -29,7 +29,7 @@ class RedactingFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         # # # print(record.msg)
-        record.msg = record.msg.replace(';', '; ')[:-1]
+        record.msg = record.msg.replace(';', '; ')
         record.msg = filter_datum(self.fields, self.REDACTION,
                                   record.msg, self.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
