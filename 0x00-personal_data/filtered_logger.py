@@ -3,9 +3,10 @@
 log info for privacy"""
 
 import re
+from typing import List
 
 
-def filter_datum(fields: list[str], redaction: str, message: str,
+def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     """Obsfucate PII in log info for privacy"""
     for field in fields:
