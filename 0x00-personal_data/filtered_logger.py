@@ -35,6 +35,7 @@ class RedactingFormatter(logging.Formatter):
                                   record.msg, self.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
 
+
 PII_FIELDS = ("email", "phone", "ssn", "password", "ip")
 
 
@@ -46,4 +47,3 @@ def get_logger() -> logging.Logger:
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
     return logger
-
