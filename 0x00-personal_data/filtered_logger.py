@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Contains the function filtered_logger """
+""" Contains the function filtered_logger that obfuscate PII in
+log info for privacy"""
 
 import re
 # import typing
