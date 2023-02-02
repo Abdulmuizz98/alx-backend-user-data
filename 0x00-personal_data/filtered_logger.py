@@ -24,11 +24,12 @@ class RedactingFormatter(logging.Formatter):
     SEPARATOR = ";"
 
     def __init__(self, fields: list[str]):
+        """Initializes the sub class RedactingFormatter """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        # # # print(record.msg)
+        """Format the log record with the function filter_datum """
         record.msg = record.msg.replace(';', '; ')
         record.msg = filter_datum(self.fields, self.REDACTION,
                                   record.msg, self.SEPARATOR)
