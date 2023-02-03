@@ -5,6 +5,7 @@ log info for privacy"""
 import re
 import logging
 from typing import List
+from mysql import connector
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
@@ -17,8 +18,8 @@ def filter_datum(fields: List[str], redaction: str, message: str,
 
 
 class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class
-        """
+    """Redacting Formatter class
+    """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
@@ -40,7 +41,7 @@ PII_FIELDS = ("email", "phone", "ssn", "password", "ip")
 
 
 def get_logger() -> logging.Logger:
-    """Returns a logging.Logger object """
+    """Returns a logging.Logger object"""
     logger = logging.getLogger('user_data').setLevel(logging.INFO)
     logger.propagate = False
     formatter = RedactingFormatter(PII_FIELDS)
@@ -48,3 +49,15 @@ def get_logger() -> logging.Logger:
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
     return logger
+
+
+def get_db() -> connector.MySQLConnection:
+    """Returns a connection to a MySQL database """
+    from os import getenv
+    USER: str = getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    PASSWD: str = getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    HOST: str = getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    DB: str = getenv('PERSONAL_DATA_DB_NAME')
+
+    cnx = connector.connect(user=USER, password=PASSWD, host=HOST, database=DB)
+    return cnx
