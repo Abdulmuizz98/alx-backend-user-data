@@ -4,7 +4,7 @@ log info for privacy"""
 
 import re
 import logging
-from typing import List
+from typing import List, Tuple
 from mysql import connector
 
 
@@ -66,15 +66,15 @@ def get_db() -> connector.MySQLConnection:
 
 def main():
     """Function that takes no parameters and returns nothing."""
-    db = get_db()
-    cursor = db.cursor()
+    db: connector.MySQLConnection = get_db()
+    cursor: MySQLCursor = db.cursor()
+    print(cursor)
     cursor.execute('SELECT * FROM users')
     lgr: logging.Logger = get_logger()
-    
     # get all field headers in a list
-    field_names = [i[0] for i in cursor.description]
+    field_names: List[str] = [i[0] for i in cursor.description]
     for row in cursor:
-        msg = ''
+        msg: str = ''
         # format each field in a row like 'name=value;'
         for i in range(len(field_names)):
             msg += "{}={}; ".format(field_names[i], str(row[i]))
@@ -82,6 +82,11 @@ def main():
     cursor.close()
     db.close()
 
+
+def hash_password(password: str) -> bytes:
+    """Returns a salted, hashed password which is a byte string."""
+    from bcrypt import hashpw, gensalt
+    return hashpw(bytes(password, 'utf-8'), gensalt())
 
 if __name__ == '__main__':
     main()
