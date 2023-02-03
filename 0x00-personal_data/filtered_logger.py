@@ -70,13 +70,14 @@ def main():
     cursor = db.cursor()
     cursor.execute('SELECT * FROM users')
     lgr: logging.Logger = get_logger()
-    # result_set = cursor.fetchall()
+    
+    # get all field headers in a list
     field_names = [i[0] for i in cursor.description]
     for row in cursor:
-        row = list(row)
         msg = ''
+        # format each field in a row like 'name=value;'
         for i in range(len(field_names)):
-            msg += "{}={};".format(field_names[i], str(row[i]))
+            msg += "{}={}; ".format(field_names[i], str(row[i]))
         lgr.info(msg)
     cursor.close()
     db.close()
