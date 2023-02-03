@@ -42,7 +42,8 @@ PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 def get_logger() -> logging.Logger:
     """Returns a logging.Logger object"""
-    logger = logging.getLogger('user_data').setLevel(logging.INFO)
+    logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
     logger.propagate = False
     formatter = RedactingFormatter(PII_FIELDS)
     stream_handler = logging.StreamHandler()
@@ -61,3 +62,25 @@ def get_db() -> connector.MySQLConnection:
 
     cnx = connector.connect(user=USER, password=PASSWD, host=HOST, database=DB)
     return cnx
+
+
+def main():
+    """Function that takes no parameters and returns nothing."""
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM users')
+    lgr: logging.Logger = get_logger()
+    # result_set = cursor.fetchall()
+    field_names = [i[0] for i in cursor.description]
+    for row in cursor:
+        row = list(row)
+        msg = ''
+        for i in range(len(field_names)):
+            msg += "{}={};".format(field_names[i], str(row[i]))
+        lgr.info(msg)
+    cursor.close()
+    db.close()
+
+
+if __name__ == '__main__':
+    main()
