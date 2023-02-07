@@ -2,12 +2,12 @@
 """ Contains the class BasicAuth to manage api authorization
 """
 
-from flask import request
-from typing import TypeVar, List
+# from flask import request
+# from typing import TypeVar, List
 from api.v1.auth.auth import Auth
 
 
-class BasciAuth(Auth):
+class BasicAuth(Auth):
     """ Defines the BasicAuth object
     """
     pass
