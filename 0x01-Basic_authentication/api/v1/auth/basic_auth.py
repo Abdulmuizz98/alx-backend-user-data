@@ -3,7 +3,7 @@
 """
 
 # from flask import request
-# from typing import TypeVar, List
+from typing import TypeVar, List
 from api.v1.auth.auth import Auth
 
 
@@ -43,3 +43,20 @@ class BasicAuth(Auth):
         if ':' not in decoded_base64_authorization_header:
             return (None, None)
         return tuple(decoded_base64_authorization_header.split(':'))
+
+    def user_object_from_credentials(self, user_email: str, user_pwd:
+                                     str) -> TypeVar('User'):
+        """ Returns the User instance based on his email and password
+        """
+        from models.user import User
+        if not user_email or type(user_email) is not str:
+            return None
+        if not user_pwd or type(user_pwd) is not str:
+            return None
+        user_list = User.search({'email': user_email})
+        if user_list == []:
+            return None
+        user = user_list[0]
+        if not user.is_valid_password(user_pwd):
+            return None
+        return user
