@@ -45,10 +45,24 @@ class DB:
         from sqlalchemy.orm.exc import NoResultFound
         key, value = list(kwargs.items())[0]
 
-        if key not in ['email', 'hashed_password']:
+        if key not in ['id', 'email', 'hashed_password']:
             raise InvalidRequestError()
-        user = self._session.query(User).filter_by(email=value).first()
+        if key == 'email':
+            user = self._session.query(User).filter_by(email=value).first()
+        if key == 'id':
+            user = self._session.query(User).filter_by(id=value).first()
 
         if not user:
             raise NoResultFound()
         return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """
+        """
+        user = self.find_user_by(id=user_id)
+        for k, v in kwargs.items():
+            if k not in ['email', 'hashed_password']:
+                raise ValueError
+            setattr(user, k, v)
+        self._session.commit()
+        return None
