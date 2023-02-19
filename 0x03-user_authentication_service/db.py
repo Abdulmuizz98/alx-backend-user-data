@@ -37,3 +37,18 @@ class DB:
         self._session.add(new_user)
         self._session.commit()
         return new_user
+
+    def find_user_by(self, **kwargs) -> User:
+        """
+        """
+        from sqlalchemy.exc import InvalidRequestError
+        from sqlalchemy.orm.exc import NoResultFound
+        key, value = list(kwargs.items())[0]
+
+        if key not in ['email', 'hashed_password']:
+            raise InvalidRequestError()
+        user = self._session.query(User).filter_by(email=value).first()
+
+        if not user:
+            raise NoResultFound()
+        return user
