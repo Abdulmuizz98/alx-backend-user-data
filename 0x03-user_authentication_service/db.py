@@ -45,12 +45,15 @@ class DB:
         from sqlalchemy.orm.exc import NoResultFound
         key, value = list(kwargs.items())[0]
 
-        if key not in ['id', 'email', 'hashed_password']:
+        if key not in ['id', 'email', 'session_id']:
             raise InvalidRequestError()
         if key == 'email':
             user = self._session.query(User).filter_by(email=value).first()
         if key == 'id':
             user = self._session.query(User).filter_by(id=value).first()
+        if key == 'session_id':
+            v = value
+            user = self._session.query(User).filter_by(session_id=v).first()
 
         if not user:
             raise NoResultFound()
