@@ -61,7 +61,7 @@ class DB:
         """
         user = self.find_user_by(id=user_id)
         for k, v in kwargs.items():
-            if k not in ['email', 'hashed_password']:
+            if k not in ['email', 'hashed_password', 'session_id']:
                 raise ValueError
             setattr(user, k, v)
         self._session.commit()
