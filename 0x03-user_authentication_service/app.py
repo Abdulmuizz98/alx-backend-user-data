@@ -85,6 +85,7 @@ def reset_password_token():
 def reset_password():
     """Sessions Endpoint
     """
+    email = request.form['email']
     reset_token = request.form['reset_token']
     password = request.form['password']
     try:
