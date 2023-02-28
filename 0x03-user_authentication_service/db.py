@@ -54,7 +54,7 @@ class DB:
         if key == 'session_id':
             v = value
             user = self._session.query(User).filter_by(session_id=v).first()
-        if key == 'session_id':
+        if key == 'reset_token':
             v = value
             user = self._session.query(User).filter_by(reset_token=v).first()
 
