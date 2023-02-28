@@ -101,4 +101,3 @@ class Auth:
             return None
         except NoResultFound:
             raise ValueError('User DNE')
-
