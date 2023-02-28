@@ -2,7 +2,8 @@
 """Flask application
 """
 
-from flask import Flask, jsonify, request, make_response, abort
+from flask import Flask, jsonify, request
+from flask import make_response, abort, redirect, url_for
 from auth import Auth
 
 app = Flask(__name__)
@@ -43,6 +44,19 @@ def login():
     resp = make_response(jsonify({"email": email, "message": "logged in"}))
     resp.set_cookie('session_id', session)
     return resp
+
+
+@app.route('/sessions', methods=['DELETE'])
+def logout():
+    """Sessions Endpoint
+    """
+    session_id = request.cookies.get('session_id')
+    print(session_id)
+    user = AUTH.get_user_from_session_id(session_id)
+    if not user:
+        abort(403)
+    AUTH.destroy_session(user.id)
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":
